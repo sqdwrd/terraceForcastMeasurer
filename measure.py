@@ -17,7 +17,7 @@ def write(dht11: WeatherData):
     measure_file = Paths.measure.open("a+")
     measure_csv = csv.writer(measure_file)
 
-    measure_csv.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S")] + dht11.toStrList())
+    measure_csv.writerow(dht11.toStrList())
 
     measure_file.close()
 
@@ -30,3 +30,7 @@ def main():
 def test_write():
     write(WeatherData(25, 40))
     write(WeatherData(30.5, 60.5))
+
+
+if __name__ == '__main__':
+    test_write()

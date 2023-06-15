@@ -8,8 +8,8 @@
 ### 데이터 구조(CSV)
 `~/.forecast/measurement.csv`에 저장
 
-| 시간(yyyy-MM-dd HH:mm:ss) | 온도(섭씨) | 습도(%) |
-|-------------------------|--------|-------|
+| 시간(yyyy-MM-dd HH:mm:ss)(KST) | 온도(섭씨) | 습도(%) |
+|------------------------------|--------|-------|
 
 ### API 요청
 프로젝트의 `weather.credential` 파일에 API 인증키(encoded)
