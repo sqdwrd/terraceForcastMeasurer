@@ -1,32 +1,20 @@
 import csv
-from pathlib import Path
 from datetime import datetime
 
-path_home = Path.home()
-path_data = path_home.joinpath("forecast")
-path_measure = path_data.joinpath("measure.csv")
+from globals import *
 
-if not path_data.exists():
-    path_data.mkdir()
+if not Paths.data.exists():
+    Paths.data.mkdir()
 
 
-class Dht11Data:
-    def __init__(self, temp: float, humidity: float):
-        self.temp = temp
-        self.humidity = humidity
-
-    def toStrList(self) -> list[str]:
-        return [str(self.temp), str(self.humidity)]
-
-
-def measure() -> Dht11Data:
+def measure() -> WeatherData:
     raise NotImplementedError
 
 
-def write(dht11: Dht11Data):
-    if not path_measure.exists():
-        path_measure.touch()
-    measure_file = path_measure.open("a+")
+def write(dht11: WeatherData):
+    if not Paths.measure.exists():
+        Paths.measure.touch()
+    measure_file = Paths.measure.open("a+")
     measure_csv = csv.writer(measure_file)
 
     measure_csv.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S")] + dht11.toStrList())
@@ -40,5 +28,5 @@ def main():
 
 
 def test_write():
-    write(Dht11Data(25, 40))
-    write(Dht11Data(30.5, 60.5))
+    write(WeatherData(25, 40))
+    write(WeatherData(30.5, 60.5))
