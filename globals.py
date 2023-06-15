@@ -14,3 +14,8 @@ class Paths:
     home = Path.home()
     data = home.joinpath("forecast")
     measure = data.joinpath("measure.csv")
+    forecast = data.joinpath("forecast.csv")
+
+    def __init__(self):
+        if not self.data.exists():
+            self.data.mkdir()
