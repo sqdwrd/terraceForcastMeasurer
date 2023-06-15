@@ -11,7 +11,7 @@ if not path_data.exists():
 
 
 class Dht11Data:
-    def __init__(self, temp: int, humidity: int):
+    def __init__(self, temp: float, humidity: float):
         self.temp = temp
         self.humidity = humidity
 
@@ -40,5 +40,5 @@ def main():
 
 
 def test_write():
-    dht11_measurement = Dht11Data(30, 60)
-    write(dht11_measurement)
+    write(Dht11Data(25, 40))
+    write(Dht11Data(30.5, 60.5))
