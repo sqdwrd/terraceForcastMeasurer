@@ -3,17 +3,18 @@ from pathlib import Path
 
 
 class WeatherData:
-    def __init__(self, temp: float, humidity: float, timestamp: int = None):
+    def __init__(self, temp: float, humidity: float, timestamp: datetime = None):
         if timestamp is None:
-            timestamp = datetime.now().timestamp()
+            timestamp = datetime.now()
 
-        self.timestamp = timestamp
+        from zoneinfo import ZoneInfo
+        self.timestamp = datetime.fromtimestamp(timestamp.timestamp(), tz=ZoneInfo("Asia/Seoul"))
+
         self.temp = temp
         self.humidity = humidity
 
     def toStrList(self) -> list[str]:
-        from zoneinfo import ZoneInfo
-        return [datetime.fromtimestamp(self.timestamp, tz=ZoneInfo("Asia/Seoul")).strftime("%Y-%m-%d %H:%M:%S"),
+        return [self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
                 str(self.temp),
                 str(self.humidity)]
 
