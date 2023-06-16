@@ -12,10 +12,12 @@ def readKey() -> str:
         return file.read()
 
 
-def getApi() -> requests.Response:
-    auth_key = readKey()
-    api_url = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey={auth_key}&numOfRows=1000&pageNo=1&base_date=20230616&base_time=0500&nx=55&ny=127"
+def getApi(base_time: datetime, key: str) -> requests.Response:
+    if base_time.hour % 3 != 2:
+        raise ValueError(f"Invalid hour, value was:{base_time.hour}")
 
+    api_url = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey={key}&numOfRows=1000&pageNo=1&base_date={base_time.strftime('%Y%m%d')}&base_time={base_time.strftime('%H')}00&nx=55&ny=127"
+    print(f"fromapi.getApi: getting {api_url}")
     return requests.get(api_url)
 
 
@@ -62,7 +64,18 @@ def write(weather: WeatherData):
 
 
 def main():
-    api_result = getApi()
+    def latestUpdateHour(base_hour: int) -> int:
+        """기상청 단기예보의 API 요청에 맞게 base_hour로부터 가장 최근의 기준시(02, 05, 08, ..., 23) 반환"""
+        if base_hour % 3 != 2:
+            return (base_hour // 3) * 3 + 2
+
+    def latestUpdateTime(base_time: datetime) -> datetime:
+        return base_time.replace(hour=latestUpdateHour(base_time.hour), minute=0, second=0, microsecond=0)
+
+    base_time = latestUpdateTime(datetime.now())
+    print(f"fromapi.main: base_time is {base_time}")
+    api_result = getApi(base_time, key=readKey())
+
     weather = parse(api_result)
     write(weather)
 
